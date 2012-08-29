@@ -1,0 +1,32 @@
+%span{:class => "filesize"}
+  File: 
+  - if post.photo?
+    = link_to File.basename(post.photo.path), post.photo_url, :target => "_blank"
+    =" -("
+    %em
+      = File.size(post.photo.path).to_s+" B"
+    =")"
+  - else
+    No file
+%span{:class => "thumbnailmsg"}
+  Thumbnail displayed, click image for full size.
+%br
+- # todo: support svg?
+- if post.photo?
+  = link_to (image_tag post.photo_url(:thumb), :class=> 'thumb'), post.photo_url, :target => "_blank"
+%label
+  = check_box_tag "delete[]", post.id
+  %span{:class => "filetitle"}
+  %span{:class => "postername"}
+    - if post.name == ""
+      = "Anonymous"
+    - else
+      = post.name
+  = post.created_at
+%span{:class => "reflink"}
+  - #todo reply mode
+  = link_to "No. #{post.id}", [@board, post]
+  %div.replylink= link_to 'Reply', polymorphic_path(["new", @board, "post"], :post_id => post.id)
+%blockquote
+  - if post.comment.present?
+    %p= post.comment #simple_format(auto_link(leaf.content))
