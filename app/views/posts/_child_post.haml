@@ -1,0 +1,39 @@
+%table
+  %tbody
+    %tr
+      %td{:class=>"doubledash"}
+        >>
+      %td{:class=>"reply", :id=>"reply#{child_post.id}"}
+        %span{:class => "filesize"}
+          File: 
+          - if child_post.photo?
+            = link_to File.basename(child_post.photo.path), child_post.photo_url, :target => "_blank"
+            =" -("
+            %em
+              = File.size(child_post.photo.path).to_s+" B"
+            =")"
+          - else
+            No file
+        %span{:class => "thumbnailmsg"}
+          - if child_post.photo?
+            Thumbnail displayed, click image for full size.
+        %br
+        - if child_post.photo?
+          = link_to (image_tag child_post.photo_url(:thumb), :class=> 'thumb'), child_post.photo_url, :target => "_blank"
+        %label
+          = check_box_tag "delete[]", child_post.id
+          %span{:class => "filetitle"}
+          %span{:class => "postername"}
+            - if child_post.name == ""
+              = "Anonymous"
+            - else
+              = child_post.name
+          = child_post.created_at
+        %span{:class => "reflink"}
+          - #if reply_mode?
+          = #link_to_function "No. #{leaf.id}", "insert_emoticon('>>#{leaf.id}')"
+          - #else
+          = link_to "No. #{child_post.id}", ""
+        %blockquote
+          - if child_post.comment.present?
+            %p= child_post.comment #simple_format(auto_link(leaf.content))

@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts = @board.posts.all
+    @posts = @board.posts.toplevel
     @post = @board.posts.build
   end
 
@@ -29,6 +29,7 @@ class PostsController < ApplicationController
   # POST /posts.json
   def create
     @post = @board.posts.build(params[:post])
+    @post.post = @board.posts.find(params[:post_id])
 
     if @post.save
       redirect_to [@board, "posts"], notice: 'Post was successfully created.'
