@@ -9,6 +9,7 @@ gem 'activeadmin'
 gem 'haml-rails'
 gem 'pry'
 gem 'capistrano'
+gem 'rvm-capistrano'
 
 group :development do
   gem 'thin'
