@@ -1,0 +1,5 @@
+= render partial: "form"
+
+%div{:class => "firstleaf", :id => "#{@post.id}"}
+  = render partial: "top_post", locals: { post: @post }
+  = render partial: "child_post", collection: @post.posts

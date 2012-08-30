@@ -7,6 +7,7 @@ gem 'carrierwave'
 gem 'rmagick'
 gem 'activeadmin'
 gem 'haml-rails'
+gem 'pry'
 
 group :development do
   gem 'thin'

@@ -1,17 +1,19 @@
-<%= form_for([@board, @post], :html => {:multipart => true}) do |f| %>
-  <% if @post.errors.any? %>
+<%= form_for([@board, @new_post], :html => {:multipart => true}) do |f| %>
+  <% if @new_post.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
+      <h2><%= pluralize(@new_post.errors.count, "error") %> prohibited this post from being saved:</h2>
 
       <ul>
-      <% @post.errors.full_messages.each do |msg| %>
+      <% @new_post.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
       </ul>
     </div>
   <% end %>
 
-  <%= hidden_field_tag :post_id, params[:post_id] %>
+  <% if @new_post.post.present? %>
+    <%= hidden_field_tag :post_id, @new_post.post.id %>
+  <% end %>
   
   <div class="field">
     <%= f.label :name %><br />
@@ -31,7 +33,7 @@
   </div>
   <div class="field">
     <%= f.label :photo %><br />
-    <%= image_tag(@post.photo_url) if @post.photo? %>
+    <%= image_tag(@new_post.photo_url) if @new_post.photo? %>
     <%= f.file_field :photo %>
     <%= f.hidden_field :photo_cache %>
   </div>

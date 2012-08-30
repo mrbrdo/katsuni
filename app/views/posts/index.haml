@@ -5,5 +5,3 @@
   %div{:class => "firstleaf", :id => "#{post.id}"}
   = render partial: "top_post", locals: { post: post }
   = render partial: "child_post", collection: post.posts
-
-= link_to 'New Post', ["new", @board, "post"]
