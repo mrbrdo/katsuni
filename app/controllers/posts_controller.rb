@@ -21,7 +21,8 @@ class PostsController < ApplicationController
   # GET /posts/new
   # GET /posts/new.json
   def new
-    @post = @board.posts.build
+    @new_post = @board.posts.build
+    @new_post.post_id = params[:post_id]
   end
 
   # GET /posts/1/edit
