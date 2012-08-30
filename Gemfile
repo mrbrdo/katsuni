@@ -10,6 +10,7 @@ gem 'haml-rails'
 gem 'pry'
 gem 'capistrano'
 gem 'rvm-capistrano'
+gem 'ruby-ip'
 
 group :development do
   gem 'thin'
