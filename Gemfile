@@ -8,6 +8,7 @@ gem 'rmagick'
 gem 'activeadmin'
 gem 'haml-rails'
 gem 'pry'
+gem 'capistrano'
 
 group :development do
   gem 'thin'
