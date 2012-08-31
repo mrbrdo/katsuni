@@ -1,14 +1,20 @@
+require_dependency 'file_size_validator'
 class Post < ActiveRecord::Base
   has_many :posts
   belongs_to :post
   belongs_to :board
   attr_accessible :comment, :email, :name, :password, :photo, :photo_cache
   mount_uploader :photo, PhotoUploader
+  validates :photo,
+    :file_size => {
+      :maximum => 5.megabytes.to_i
+    }
 
   validates :name, length: { maximum: 100 }
   validates :email, length: { maximum: 100 }
   validates :name, length: { maximum: 100 }
   scope :toplevel, where("post_id IS ?", nil).order("updated_at DESC")
+  scope :reply_order, order("created_at ASC")
 
   before_create :process_name
   before_create :process_sage

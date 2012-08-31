@@ -35,9 +35,21 @@ class PhotoUploader < CarrierWave::Uploader::Base
   #   # do something
   # end
 
+  # process :resize_to_fit => [2000, 2000]
+
   # Create different versions of your uploaded files:
   version :thumb do
+    process :gif_convert => 'jpg'
     process :resize_to_fit => [250, 250]
+  end
+
+  # Method handles gif animation conversion by extracting out first frame within a gif
+  def gif_convert(format)
+    cache_stored_file! if !cached?
+    image = ::Magick::Image.read(current_path)
+    frames = image.first
+    frames.write("#{format}:#{current_path}")
+    destroy_image(frames)
   end
 
   # Add a white list of extensions which are allowed to be uploaded.
