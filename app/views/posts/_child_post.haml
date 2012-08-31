@@ -19,7 +19,7 @@
             Thumbnail displayed, click image for full size.
         %br
         - if child_post.photo?
-          = link_to (image_tag child_post.photo_url(:thumb), :class=> 'thumb'), child_post.photo_url, :target => "_blank"
+          = link_to (image_tag child_post.photo_url(:thumb), :class=> 'thumb smallthumb'), child_post.photo_url, :target => "_blank"
         %label
           = check_box_tag "delete[]", child_post.id
           %span{:class => "filetitle"}
