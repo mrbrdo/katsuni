@@ -1,5 +1,68 @@
-<h1>Listing boards</h1>
+    <div id="header">
+    <%= image_tag("legvan.gif") %>
+    <h1>soba7.org/ <span style="color: orange">katsuni beta</span></h1>
+    <p align="center">"pa sej to neki rečš pa je"</p>
+    </div>
+
+    <div class="box1">
+
+    <h2>Kaj je soba7.org?</h2>
+
+    <!--Soba7.org kot prvo <b>ni</b> izklop.com. //-->Smo anonimna spletna skupnost, kar pomeni,
+
+    da za objavljanje v naši sobi ni potrebna registracija. V sobi7 lahko uporabniki 
+
+    anonimno (ali pa tudi pod psevdonimom) sodelujejo v pogovorih o različnih temah in 
+
+    ustvarjajo nove. Obstaja pravilo, naj se vsaka tema začne s sliko, zato da so teme 
+
+    bolj razpoznavne. Soba7 je na nek način podobna forumu, vendar v forumih prevladuje 
+    
+    dolgovezenje, pri nas pa imamo raje kratka, jedrnata in zabavna sporočila. 
+    
+    Seveda pa to ne pomeni, da daljša sporočila niso zaželena!
+
+
+    <br><br>
+    Soba7 je narejena na principu imageboarda, ki ga mogoče kdo že pozna iz podobnih
+    tujih strani kot so <a href="http://www.2chan.net" target="_blank">2chan</a>, <a href="http://www.4chan.org" target="_blank">4chan</a>, <a href="http://www.711chan.org" target="_blank">711chan</a> itd.
+    
+    <br>
+
+    <br>
+
+    <h2>Pravilo:</h2>
+
+    Ne nalagaj, piši, beri ali prosi česarkoli, kar bi bilo v nasprotju z zakonodajo Republike Slovenije.
+    <br/>
+    Če opazite kršitev pravil nas o tem takoj <a href="mailto:soba7.org@gmail.com">obvestite</a>.
+    <br />
+    <br />
+    <h2>Kaj si drugi mislijo:</h2>
+    <a href="http://mn3njalnik.blogspot.com/2009/03/alternative-mn3njalniku-soba-7.html">mn3njalnik.blogspot.com/</a>
+    </div>
+
+    
+
+        <div class="box_cat">
+
+    <ul>
+
+    <h2>Sobe:</h2>
+
 
 <% @boards.each do |board| %>
-  <%= link_to board.title, [board, "posts"] %>
+  <li><%= link_to board.title, [board, "posts"] %></li>
 <% end %>
+
+    </ul>
+
+    
+
+
+
+    </div>
+
+    
+    <div class="box2">
+    </div>
