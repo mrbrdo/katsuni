@@ -66,13 +66,4 @@ class Post < ActiveRecord::Base
       self.name += KATSUNI_TRIPKEY + digest[-10, 10]
     end
   end
-
-  def name
-    # todo: fix
-    if self[:name].blank?
-      "Anonymous"
-    else
-      self[:name]
-    end
-  end
 end
