@@ -18,11 +18,12 @@
 %label
   = check_box_tag "delete[]", post.id, false, :id => nil
   %span{:class => "filetitle"}
+    = post.subject
   %span{:class => "postername"}
     - if post.name == ""
       = "Anonymous"
     - else
-      = post.name
+      = post_name(post)
   = post.created_at
 %span{:class => "reflink"}
   - #todo reply mode

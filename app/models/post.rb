@@ -20,6 +20,18 @@ class Post < ActiveRecord::Base
   before_create :process_sage
   validate :toplevel_post_has_photo
 
+  def sage?
+    if @sage.nil?
+      @sage = if email =~ /sage/
+        self.email = nil
+        true
+      else
+        false
+      end
+    end
+    @sage
+  end
+
   def toplevel_post_has_photo
     if post.blank? && !photo?
       self.errors[:photo] << "Photo must be present." # todo: translate
@@ -27,7 +39,7 @@ class Post < ActiveRecord::Base
   end
 
   def process_sage
-    if self.post.present? && !(email =~ /sage/)
+    if self.post.present? && !sage?
       if self.post.posts.count < KATSUNI_MAX_RES # todo: fix if more than one ppl sage
         self.post.touch
       end
