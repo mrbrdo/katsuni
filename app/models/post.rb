@@ -3,7 +3,7 @@ class Post < ActiveRecord::Base
   has_many :posts, dependent: :destroy
   belongs_to :post
   belongs_to :board
-  attr_accessible :comment, :email, :name, :password, :photo, :photo_cache, :subject
+  attr_accessible :comment, :emailp, :name, :password, :photo, :photo_cache, :subject
   mount_uploader :photo, PhotoUploader
   validates :photo,
     :file_size => {
@@ -20,16 +20,17 @@ class Post < ActiveRecord::Base
   before_create :process_sage
   validate :toplevel_post_has_photo
 
-  def sage?
-    if @sage.nil?
-      @sage = if email =~ /sage/
-        self.email = nil
-        true
-      else
-        false
-      end
+  attr_reader :emailp
+  def emailp=(value)
+    if value =~ /sage/
+      @sage = true
+    else
+      self.email = value
     end
-    @sage
+  end
+
+  def sage?
+    @sage || false
   end
 
   def toplevel_post_has_photo

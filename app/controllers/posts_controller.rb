@@ -36,7 +36,6 @@ class PostsController < ApplicationController
     @post = @board.posts.build(params[:post])
     @post.post = @board.posts.find(params[:post_id]) if params[:post_id].present?
     @new_post = @post
-    @post.sage? # trigger processing of sage
 
     expires = Time.now + 14.days
     {

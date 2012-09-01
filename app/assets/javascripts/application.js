@@ -17,7 +17,7 @@
 
 $(function() {
   $('#post_name').val(get_cookie("name"));
-  $('#post_email').val(get_cookie("email"));
+  $('#post_emailp').val(get_cookie("email"));
   $('#post_password').val(get_password("password"));
   $('#del_password').val(get_cookie("password"));
 });
