@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
   def check_ip
     unless IpCheckerSingleton.valid_ip?(request.remote_ip)
       raise "Invalid IP!"
-      # TODO: add google, search engines as valid
     end
   end
 
