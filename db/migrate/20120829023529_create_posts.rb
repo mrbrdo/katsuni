@@ -3,7 +3,6 @@ class CreatePosts < ActiveRecord::Migration
     create_table :posts do |t|
       t.string :name
       t.string :email
-      t.string :subject
       t.text :comment
       t.string :password
       t.string :photo
