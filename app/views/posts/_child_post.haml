@@ -25,11 +25,8 @@
         %span{:class => "filetitle"}
           = child_post.subject
         %span{:class => "postername"}
-          - if child_post.name == ""
-            = "Anonymous"
-          - else
-            = post_name(child_post)
-          = child_post.created_at
+          = post_name(child_post)
+        = child_post.created_at
         %span{:class => "reflink"}
           - #if reply_mode?
           = #link_to_function "No. #{leaf.id}", "insert_emoticon('>>#{leaf.id}')"
@@ -37,4 +34,4 @@
           = link_to "No. #{child_post.id}", [@board, child_post]
         %blockquote
           - if child_post.comment.present?
-            %p= child_post.comment #simple_format(auto_link(leaf.content))
+            %p= post_comment(child_post)

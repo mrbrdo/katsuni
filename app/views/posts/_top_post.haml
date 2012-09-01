@@ -20,10 +20,7 @@
   %span{:class => "filetitle"}
     = post.subject
   %span{:class => "postername"}
-    - if post.name == ""
-      = "Anonymous"
-    - else
-      = post_name(post)
+    = post_name(post)
   = post.created_at
 %span{:class => "reflink"}
   - #todo reply mode
@@ -31,4 +28,4 @@
   %div.replylink= link_to 'Reply', polymorphic_path(["new", @board, "post"], :post_id => post.id)
 %blockquote
   - if post.comment.present?
-    %p= post.comment #simple_format(auto_link(leaf.content))
+    %p= post_comment(post)

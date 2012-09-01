@@ -11,6 +11,7 @@ gem 'pry'
 gem 'capistrano'
 gem 'rvm-capistrano'
 gem 'ruby-ip'
+gem 'rinku'
 
 group :development do
   gem 'thin'
