@@ -37,6 +37,15 @@ class PostsController < ApplicationController
     @post.post = @board.posts.find(params[:post_id]) if params[:post_id].present?
     @new_post = @post
 
+    expires = Time.now + 14.days
+    {
+      name: @post.name,
+      email: @post.email,
+      password: @post.password
+    }.each_pair do |k,v|
+      cookies[k] = { value: v, expires: expires }
+    end
+
     if @post.save
       redirect_to [@board, "posts"], notice: 'Post was successfully created.'
     else
@@ -63,6 +72,16 @@ class PostsController < ApplicationController
     @post.destroy
 
     redirect_to posts_url
+  end
+
+  def delete_multiple
+    params[:delete].map{ |id| Post.find(id.to_i) }.compact.each do |post|
+      if post.password == params[:password]
+        post.destroy
+      end
+    end
+
+    redirect_to :back
   end
 
 private

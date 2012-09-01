@@ -1,8 +1,12 @@
 = render partial: "form"
 %h1 Listing posts
 
-- @posts.each do |post|
-  %div{:class => "firstleaf", :id => "#{post.id}"}
-    = render partial: "top_post", locals: { post: post }
-    = render partial: "child_post", collection: post.posts.reply_order
-    %div{:style => "clear: left; line-height: 0; height: 0"}
+= form_tag(delete_multiple_board_posts_path(@board), method: :post, id: "delform") do
+  - @posts.each do |post|
+    %div{:class => "firstleaf", :id => "#{post.id}"}
+      = render partial: "top_post", locals: { post: post }
+      = render partial: "child_post", collection: post.posts.reply_order
+      %div{:style => "clear: left; line-height: 0; height: 0"}
+
+  = password_field_tag("password", "", :size => "8", :id => "del_password")
+  = submit_tag("Delete posts")

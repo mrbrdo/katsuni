@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(:version => 20120829045408) do
   create_table "posts", :force => true do |t|
     t.string   "name"
     t.string   "email"
+    t.string   "subject"
     t.text     "comment"
     t.string   "password"
     t.string   "photo"

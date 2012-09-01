@@ -16,7 +16,7 @@
   = link_to (image_tag post.photo_url(:thumb), :class=> 'thumb'), post.photo_url, :target => "_blank"
 
 %label
-  = check_box_tag "delete[]", post.id
+  = check_box_tag "delete[]", post.id, false, :id => nil
   %span{:class => "filetitle"}
   %span{:class => "postername"}
     - if post.name == ""

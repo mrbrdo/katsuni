@@ -12,4 +12,12 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require stolen
 //= require_tree .
+
+$(function() {
+  $('#post_name').val(get_cookie("name"));
+  $('#post_email').val(get_cookie("email"));
+  $('#post_password').val(get_password("password"));
+  $('#del_password').val(get_cookie("password"));
+});

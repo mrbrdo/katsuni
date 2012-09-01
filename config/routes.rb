@@ -4,7 +4,11 @@ Katsuni::Application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
 
   resources :boards do
-    resources :posts
+    resources :posts do
+      collection do
+        post :delete_multiple
+      end
+    end
   end
 
   root :to => "boards#index"

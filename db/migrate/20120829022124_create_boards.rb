@@ -6,5 +6,7 @@ class CreateBoards < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    Board.create! :title => "Random", :slug => "b"
   end
 end
