@@ -8,5 +8,7 @@
       = render partial: "child_post", collection: post.posts.reply_order
       %div{:style => "clear: left; line-height: 0; height: 0"}
 
+  = check_box_tag("file_only", "1", false)
+  = label_tag "file_only", "File only"
   = password_field_tag("password", "", :size => "8", :id => "del_password")
   = submit_tag("Delete posts")

@@ -1,4 +1,5 @@
 require_dependency 'file_size_validator'
+require_dependency 'rc4'
 class Post < ActiveRecord::Base
   has_many :posts, dependent: :destroy
   belongs_to :post
@@ -10,9 +11,13 @@ class Post < ActiveRecord::Base
       :maximum => 5.megabytes.to_i
     }
 
-  validates :name, length: { maximum: 100 }, format: { with: /\A[^\n\r]*\z/ }
-  validates :email, length: { maximum: 100 }, format: { with: /\A[^\n\r]*\z/ }
-  validates :subject, length: { maximum: 100 }, format: { with: /\A[^\n\r]*\z/ }
+  validates :name, length: { maximum: KATSUNI_MAX_FIELD_LENGTH },
+    format: { with: /\A[^\n\r]*\z/ }
+  validates :email, length: { maximum: KATSUNI_MAX_FIELD_LENGTH },
+    format: { with: /\A[^\n\r]*\z/ }
+  validates :subject, length: { maximum: KATSUNI_MAX_FIELD_LENGTH },
+    format: { with: /\A[^\n\r]*\z/ }
+  validates :comment, length: { maximum: KATSUNI_MAX_COMMENT_LENGTH }
   scope :toplevel, where("post_id IS ?", nil).order("updated_at DESC")
   scope :reply_order, order("created_at ASC")
 
@@ -47,23 +52,39 @@ class Post < ActiveRecord::Base
     end
   end
 
-  def process_name
-    self.name = name.strip.gsub(/[\n\r]/, "")
+  def get_tripcode
+    require 'digest/md5'
+    if name =~ /^(.*?)((?<!&)#|#{Regexp.escape(KATSUNI_TRIPKEY)})(.*)$/
+      namepart, marker, trippart = $1, $2, $3
+      trip = ''
+      marker = Regexp.escape(marker)
+      if KATSUNI_SECRET.present? &&
+        trippart.sub!(/(?:#{marker})(?<!&#)(?:#{marker})*(.*)$/, '')
+        trip = KATSUNI_TRIPKEY * 2 +
+          RC4::hide_data($1, 6, "trip", KATSUNI_SECRET, true)
+        return [namepart, trip] if trippart.blank?
+      end
 
-    # tripcode
-    if name =~ /(#|!)(.*)/
-      cap = $2
-      cap2 = cap + "H."
-      salt = cap2[1,2]
-      salt.gsub!(/[^\.-z]/,".")
+      salt = (trippart + "H..").slice(1,2)
+      salt.gsub!(/[^\.-z]/, ".")
       from = ":;<=>?@[\\]^_`"
       to = "ABCDEFGabcdef".each_char.to_a
       from_to = Hash[from.each_char.map { |c| [c, to.shift] }]
       salt.gsub!(from, from_to)
-      require 'digest/md5'
-      digest = Digest::MD5.hexdigest(cap + salt).to_s
-      name.gsub!(/(#|!)(.*)/,"")
-      self.name += KATSUNI_TRIPKEY + digest[-10, 10]
+      digest = Digest::MD5.hexdigest(trippart + salt).to_s
+      trip = KATSUNI_TRIPKEY + digest[-10, digest.length] + trip
+
+      [namepart, trip]
+    else
+      [name, nil]
     end
+  end
+
+  def process_name
+    self.name = name.strip
+
+    # tripcode
+    namepart, trip = get_tripcode
+    self.name = "#{namepart}#{trip}"
   end
 end
