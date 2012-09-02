@@ -78,7 +78,11 @@ class PostsController < ApplicationController
   def delete_multiple
     params[:delete].map{ |id| Post.find(id.to_i) }.compact.each do |post|
       if post.password == params[:password]
-        post.destroy
+        if params[:file_only].present?
+          post.remove_photo!
+        else
+          post.destroy
+        end
       end
     end
 
