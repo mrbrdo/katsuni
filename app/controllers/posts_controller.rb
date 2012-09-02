@@ -34,6 +34,7 @@ class PostsController < ApplicationController
   # POST /posts.json
   def create
     @post = @board.posts.build(params[:post])
+    @post.ip_address = request.remote_ip
     @post.post = @board.posts.find(params[:post_id]) if params[:post_id].present?
     @new_post = @post
 

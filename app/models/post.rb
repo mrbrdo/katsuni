@@ -11,6 +11,8 @@ class Post < ActiveRecord::Base
       :maximum => 5.megabytes.to_i
     }
 
+  # TODO: u are supposed to be allowed to put a http://... etc links in email field
+
   validates :name, length: { maximum: KATSUNI_MAX_FIELD_LENGTH },
     format: { with: /\A[^\n\r]*\z/ }
   validates :email, length: { maximum: KATSUNI_MAX_FIELD_LENGTH },
@@ -18,12 +20,14 @@ class Post < ActiveRecord::Base
   validates :subject, length: { maximum: KATSUNI_MAX_FIELD_LENGTH },
     format: { with: /\A[^\n\r]*\z/ }
   validates :comment, length: { maximum: KATSUNI_MAX_COMMENT_LENGTH }
+  validates :ip_address, :presence => true
   scope :toplevel, where("post_id IS ?", nil).order("updated_at DESC")
   scope :reply_order, order("created_at ASC")
 
   before_create :process_name
   before_create :process_sage
   validate :toplevel_post_has_photo
+  validate :flood_check # TODO: should happen after comment is already processed etc
 
   attr_reader :emailp
   def emailp=(value)
@@ -41,6 +45,27 @@ class Post < ActiveRecord::Base
   def toplevel_post_has_photo
     if post.blank? && !photo?
       self.errors[:photo] << "Photo must be present." # todo: translate
+    end
+  end
+
+  def flood_check
+    if photo?
+      maxtime = Time.now - KATSUNI_RENZOKU2
+      if Post.where("ip_address = ? AND created_at > ?", ip_address, maxtime).count > 0
+        self.errors[:base] << "RENZOKU2"
+      end
+    else
+      # check for too quick replies or text-only posts
+      maxtime = Time.now - KATSUNI_RENZOKU
+      if Post.where("ip_address = ? AND created_at > ?", ip_address, maxtime).count > 0
+        self.errors[:base] << "RENZOKU"
+      end
+
+      # check for repeated messages
+      maxtime = Time.now - KATSUNI_RENZOKU3
+      if Post.where("ip_address = ? AND created_at > ? AND comment = ?", ip_address, maxtime, comment).count > 0
+        self.errors[:base] << "RENZOKU3"
+      end
     end
   end
 
